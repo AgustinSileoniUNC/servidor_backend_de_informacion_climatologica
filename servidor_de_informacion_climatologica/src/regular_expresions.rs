@@ -7,10 +7,9 @@ use crate::structs::TiempoPresente;
 
 
 
-pub fn obtener_tiempo_presente(texto:String)-> TiempoPresente{
+pub fn obtener_estructura_tiempo_presente(texto:String)-> TiempoPresente{
     
     let regular_expression =  Regex::new(r"(\w+(\D*)*(\w+)*)(;)(\d{2}-\w+-\d{4})(;)(\d{2}:\d{2})(;)(\w+(\s\w+)*)(;)(\d+(\.\d+)*)(\s(km))(;)((-)*\d+((\.\d+)*))(;)((No se calcula)|((-)*\d+\.*\d*))(;\s)(\d+)(;)(\w+(\s\w+)*(\s\s\w+)*)(;)(\d+(\.\d+)*)").unwrap();
-    //let regular_expression_estacion =  Regex::new(r"(\w+(\D*)*(\w+)*)(;)").unwrap();
 
 
     match regular_expression.captures(&texto){
@@ -33,5 +32,6 @@ pub fn obtener_tiempo_presente(texto:String)-> TiempoPresente{
         }    
     }
 }
+
 
 

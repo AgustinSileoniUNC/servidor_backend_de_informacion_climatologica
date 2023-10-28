@@ -1,16 +1,19 @@
 use std::io;
 use std::fs::File;
 use chrono::Local;
+use crate::extract_data::obtener_datos_tiempo_presente;
+use crate::structs::TiempoPresente;
 
-pub fn tiempo_presente(){
-
-    
+pub fn actualizar_datos_tiempo_presente()->Vec<TiempoPresente>{
+        
     let name_file_for_download= "observaciones/tiepre";
     let url_update_daily = create_url_download(name_file_for_download.to_string());
     let data = download_data(&url_update_daily);
-    let name_file_for_save = "tiempo_presente";
     
-    create_file(name_file_for_save, data)
+    return obtener_datos_tiempo_presente(data);
+
+    //let name_file_for_save = "tiempo_presente";
+    //create_file(name_file_for_save, data)
 }
 
 
@@ -19,8 +22,8 @@ pub fn pronostico(){
     let name_file_for_download = "pron5d/pron";
     let url_pronostico = create_url_download(name_file_for_download.to_string());
     let data = download_data(&url_pronostico);
-    let name_file_for_save = "pronostico";
 
+    let name_file_for_save = "pronostico";
     create_file(name_file_for_save, data)
 }
 
@@ -30,14 +33,14 @@ pub fn datos_horarios(){
     let name_file_for_download = "bservaciones/datohorario";
     let url_datos_horarios = create_url_download(name_file_for_download.to_string()); //Without extension
     let data = download_data(&url_datos_horarios);
+    
     let name_file_for_save = "datos_horarios";
-
     create_file(name_file_for_save, data)
 }
 
 
 
-fn download_data(url:&str)-> String{
+pub fn download_data(url:&str)-> String{
 
     let response = reqwest::blocking::get(url)
                                         .expect("No es posible actualizar la informacion");
