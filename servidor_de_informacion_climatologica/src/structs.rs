@@ -13,4 +13,13 @@ pub struct TiempoPresente{
     pub presion_superficie: String
 }
 
-
+#[derive(Debug)]
+pub struct Pronostico{
+    pub estacion: String,
+    pub fecha: String,
+    pub hora: String,
+    pub temperatura: String,
+    pub viento_direccion: String,
+    pub viento_intensidad: String,
+    pub precipitacion: String
+}

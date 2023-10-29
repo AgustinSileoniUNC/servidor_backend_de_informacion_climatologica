@@ -1,30 +1,33 @@
 use std::io;
 use std::fs::File;
 use chrono::Local;
-use crate::extract_data::obtener_datos_tiempo_presente;
-use crate::structs::TiempoPresente;
+use crate::extract_data::{filter_data_tiempo_presente, filter_data_pronostico};
+use crate::structs::{TiempoPresente, Pronostico};
 
 pub fn actualizar_datos_tiempo_presente()->Vec<TiempoPresente>{
         
     let name_file_for_download= "observaciones/tiepre";
+    //El link de descarga utiliza la fecha por lo que cambia cada dia
     let url_update_daily = create_url_download(name_file_for_download.to_string());
-    let data = download_data(&url_update_daily);
+    let data_from_tiempo_presente = download_data(&url_update_daily);
     
-    return obtener_datos_tiempo_presente(data);
+    return filter_data_tiempo_presente( data_from_tiempo_presente );
 
     //let name_file_for_save = "tiempo_presente";
     //create_file(name_file_for_save, data)
 }
 
 
-pub fn pronostico(){
+pub fn pronostico()-> Vec<Pronostico>{
 
     let name_file_for_download = "pron5d/pron";
     let url_pronostico = create_url_download(name_file_for_download.to_string());
-    let data = download_data(&url_pronostico);
+    let data_from_pronostico = download_data(&url_pronostico);
 
-    let name_file_for_save = "pronostico";
-    create_file(name_file_for_save, data)
+    return filter_data_pronostico(data_from_pronostico)
+
+    //let name_file_for_save = "pronostico";
+    //create_file(name_file_for_save, data)
 }
 
 
