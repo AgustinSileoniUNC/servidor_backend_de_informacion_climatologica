@@ -1,7 +1,7 @@
 
 use regex::Regex;
 
-use crate::structs::{TiempoPresente, Pronostico};
+use crate::structs::{TiempoPresente, Pronostico, DatoHorario};
 
 
 pub fn obtain_report_tiempo_presente(texto:String)-> TiempoPresente{
@@ -32,13 +32,10 @@ pub fn obtain_report_tiempo_presente(texto:String)-> TiempoPresente{
 
 
 
-
-
-pub fn obtain_struct_pronostico( estacion:String, texto:String) -> Pronostico{
+pub fn report_pronostico( estacion:String, texto:String) -> Pronostico{
 
      //let nombre_estacion = Regex::new(r"([\w*().]+)$").unwrap();
-     let regular_expression = Regex::new(r"(\d{2}/\w{3}/\d{4}\s*)(\d{2})(Hs.\s*)(\d+.\d\s*)(\d+)(\s[|]\s*)(\d+\s*)(\d+.\d)").unwrap();
-
+     let regular_expression = Regex::new(r"(\d{2})(\d{2})(\d{4})(\s*)(\d+)(\s*)((-)*\d*\.\d+)(\s*)(\d*)*(\s*)(((\d+\.\d)*))(\s*)(\d*)(\s*)(\d*)(\s*)(\w+(\D*)*(\w+)*)").unwrap();
      //Elimina la Ñ porque no la registra bien
      //Ã‘ es la forma en la que lee la ñ
      //modificada = linea.replace("Ã‘","N");
@@ -61,31 +58,35 @@ pub fn obtain_struct_pronostico( estacion:String, texto:String) -> Pronostico{
     }
 }
 
-pub fn identify_data_line(line:String)->bool{
-    let regular_expression = Regex::new(r"(\d{2}/\w{3}/\d{4}\s*)(\d{2})(Hs.\s*)(\d+.\d\s*)(\d+)(\s[|]\s*)(\d+\s*)(\d+.\d)").unwrap();
 
-    if regular_expression.is_match(&line){
-        return true;
-    }
-    else{
-        return false;
-    }
+
+pub fn report_dato_horario(texto:String)-> DatoHorario{
+
+    let regular_expression = Regex::new(r"(\d{8})(\s*)(\d+)(\s*)((-)*\d*\.\d+)(\s*)(\d*)*(\s*)(((\d+\.\d)*))(\s*)(\d*)(\s*)(\d*)(\s*)(\w+(\D*)*(\w+)*)").unwrap();
+    match regular_expression.captures(&texto) {
+        Some(caps)=>{
+
+            DatoHorario{
+                estacion: caps[18].trim().to_owned(),
+                fecha: caps[1].to_owned(),
+                hora: caps[3].to_owned(),
+                temperatura: caps[5].to_owned(),
+                humedad_relativa: caps[8].to_owned(),
+                presion_superficie: caps[10].to_owned(),
+                viento_direccion: caps[14].to_owned(),
+                viento_intensidad: caps[16].to_owned()
+            }
+        }
+        None => {
+            None.unwrap()
+        }
+    }    
 }
 
-pub fn identify_estacion_line(line:String)-> bool{
-    let regular_expression_estacion_line = Regex::new(r"([\w*_*]+)$").unwrap();
-
-    if regular_expression_estacion_line.is_match(&line){
-        return true;
-    }
-    else{
-        return false;
-    }
-}
 
 pub fn obtain_estacion_pronostico(texto:String)-> String{
     
-    let nombre_estacion = Regex::new(r"([\w*().]+)$").unwrap();
+    let nombre_estacion: Regex = Regex::new(r"([\w*().]+)$").unwrap();
 
     match nombre_estacion.captures(&texto){
         Some(caps) => {
@@ -94,6 +95,30 @@ pub fn obtain_estacion_pronostico(texto:String)-> String{
         None => { 
              return "".to_string();   
         }    
+    }
+}
+
+pub fn identify_data_line_pronostico(line:String)->bool{
+    let regular_expression = Regex::new(r"(\d{2}/\w{3}/\d{4}\s*)(\d{2})(Hs.\s*)(\d+.\d\s*)(\d+)(\s[|]\s*)(\d+\s*)(\d+.\d)").unwrap();
+
+    return regular_expression.is_match(&line);
+
+}
+
+pub fn identify_data_line_dato_horario(line:String)-> bool{
+    let regular_expression = Regex::new(r"(\d{8})(\s*)(\d+)(\s*)((-)*\d*\.\d+)(\s*)(\d*)*(\s*)(((\d+\.\d)*))(\s*)(\d*)(\s*)(\d*)(\s*)(\w+(\D*)*(\w+)*)").unwrap();
+
+    return regular_expression.is_match(&line);
+
+}
+pub fn identify_estacion_line(line:String)-> bool{
+    let regular_expression_estacion_line = Regex::new(r"([\w*_*]+)$").unwrap();
+
+    if regular_expression_estacion_line.is_match(&line){
+        return true;
+    }
+    else{
+        return false;
     }
 }
 

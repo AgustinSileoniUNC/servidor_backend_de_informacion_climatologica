@@ -1,8 +1,6 @@
-use std::io;
-use std::fs::File;
 use chrono::Local;
-use crate::extract_data::{filter_data_tiempo_presente, filter_data_pronostico};
-use crate::structs::{TiempoPresente, Pronostico};
+use crate::extract_data::{filter_data_tiempo_presente, filter_data_pronostico, filter_data_dato_horario};
+use crate::structs::{TiempoPresente, Pronostico, DatoHorario};
 
 pub fn actualizar_datos_tiempo_presente()->Vec<TiempoPresente>{
         
@@ -18,7 +16,7 @@ pub fn actualizar_datos_tiempo_presente()->Vec<TiempoPresente>{
 }
 
 
-pub fn pronostico()-> Vec<Pronostico>{
+pub fn actualizar_datos_pronostico()-> Vec<Pronostico>{
 
     let name_file_for_download = "pron5d/pron";
     let url_pronostico = create_url_download(name_file_for_download.to_string());
@@ -31,14 +29,16 @@ pub fn pronostico()-> Vec<Pronostico>{
 }
 
 
-pub fn datos_horarios(){
+pub fn actualizar_datos_horarios()-> Vec<DatoHorario>{
 
-    let name_file_for_download = "bservaciones/datohorario";
-    let url_datos_horarios = create_url_download(name_file_for_download.to_string()); //Without extension
-    let data = download_data(&url_datos_horarios);
-    
-    let name_file_for_save = "datos_horarios";
-    create_file(name_file_for_save, data)
+    //let name_file_for_download = "observaciones/datohorario";
+    //let url_datos_horarios = create_url_download(name_file_for_download.to_string()); //Without extension
+    let data = download_data("https://ssl.smn.gob.ar/dpd/descarga_opendata.php?file=observaciones/datohorario20231028.txt");
+
+    return filter_data_dato_horario(data);
+
+//    let name_file_for_save = "datos_horarios";
+//    create_file(name_file_for_save, data)
 }
 
 
@@ -50,22 +50,6 @@ pub fn download_data(url:&str)-> String{
     let body_response = response.text()
                                         .expect("No es posible acceder a la informacion descargada");
     return  body_response;
-}
-
-
-fn create_file(name_file:&str, body_response:String){
-
-
-    let mut name_file_txt = name_file.to_owned();
-    name_file_txt.push_str(".txt");
-
-    println!("{}", name_file_txt);
-    let mut archivo_salida = File::create(name_file_txt)
-                                     .expect("Error al crear el archivo");
-    io::copy(&mut body_response.as_bytes(), &mut archivo_salida)
-                                     .expect("Error al copiar los datos en el archiv de texto");
-
-
 }
 
 

@@ -23,3 +23,15 @@ pub struct Pronostico{
     pub viento_intensidad: String,
     pub precipitacion: String
 }
+
+#[derive(Debug)]
+pub struct DatoHorario{
+    pub estacion: String,
+    pub fecha: String,
+    pub hora: String,
+    pub temperatura: String,
+    pub humedad_relativa: String,
+    pub presion_superficie: String,
+    pub viento_direccion: String,
+    pub viento_intensidad: String,
+}
