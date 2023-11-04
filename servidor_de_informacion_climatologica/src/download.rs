@@ -1,6 +1,6 @@
 use chrono::Local;
 use crate::extract_data::{filter_data_tiempo_presente, filter_data_pronostico, filter_data_dato_horario};
-use crate::structs::{TiempoPresente, Pronostico, DatoHorario};
+use crate::models::{TiempoPresente, Pronostico, DatoHorario};
 
 pub fn actualizar_datos_tiempo_presente()->Vec<TiempoPresente>{
         

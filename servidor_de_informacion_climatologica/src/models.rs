@@ -1,3 +1,5 @@
+use diesel::prelude::Queryable;
+
 
 #[derive(Debug)]
 pub struct TiempoPresente{
@@ -34,4 +36,13 @@ pub struct DatoHorario{
     pub presion_superficie: String,
     pub viento_direccion: String,
     pub viento_intensidad: String,
+}
+
+#[derive(Queryable,Debug)]
+pub struct Estacion{
+    pub id_estacion: i32,
+    pub alias :String,
+    pub nombre_estacion_tiempo_presente: Option<String>,
+    pub nombre_estacion_dato_horario: Option<String>,
+    pub nombre_estacion_pronostico:Option<String>
 }

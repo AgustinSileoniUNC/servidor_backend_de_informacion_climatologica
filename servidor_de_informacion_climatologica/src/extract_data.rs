@@ -1,5 +1,5 @@
 
-use crate::{regular_expressions::{obtain_report_tiempo_presente, obtain_estacion_pronostico, identify_estacion_line, report_dato_horario, report_pronostico, identify_data_line_pronostico, identify_data_line_dato_horario}, structs::{TiempoPresente, Pronostico, DatoHorario}};
+use crate::{regular_expressions::{obtain_report_tiempo_presente, obtain_estacion_pronostico, identify_estacion_line, report_dato_horario, report_pronostico, identify_data_line_pronostico, identify_data_line_dato_horario}, models::{TiempoPresente, Pronostico, DatoHorario}};
 
 
 

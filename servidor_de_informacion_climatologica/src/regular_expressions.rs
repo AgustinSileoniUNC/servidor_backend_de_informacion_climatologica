@@ -1,7 +1,7 @@
 
 use regex::Regex;
 
-use crate::structs::{TiempoPresente, Pronostico, DatoHorario};
+use crate::models::{TiempoPresente, Pronostico, DatoHorario};
 
 
 pub fn obtain_report_tiempo_presente(texto:String)-> TiempoPresente{
