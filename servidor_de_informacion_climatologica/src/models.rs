@@ -26,16 +26,17 @@ pub struct Pronostico{
     pub precipitacion: String
 }
 
-#[derive(Debug)]
+#[derive(Queryable,Debug)]
 pub struct DatoHorario{
+    pub id_reporte: i32,
     pub estacion: String,
     pub fecha: String,
     pub hora: String,
-    pub temperatura: String,
-    pub humedad_relativa: String,
-    pub presion_superficie: String,
-    pub viento_direccion: String,
-    pub viento_intensidad: String,
+    pub temperatura: Option<String>,
+    pub humedad_relativa: Option<String>,
+    pub presion_superficie: Option<String>,
+    pub viento_direccion: Option<String>,
+    pub viento_intensidad: Option<String>,
 }
 
 #[derive(Queryable,Debug)]
@@ -46,3 +47,4 @@ pub struct Estacion{
     pub nombre_estacion_dato_horario: Option<String>,
     pub nombre_estacion_pronostico:Option<String>
 }
+

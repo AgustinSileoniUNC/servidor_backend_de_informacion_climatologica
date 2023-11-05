@@ -44,7 +44,6 @@ pub fn filter_data_pronostico(data:String)-> Vec<Pronostico>{
     let mut name_estacion = String::new();
 
     for (_, line) in lines.enumerate(){
-
         if identify_estacion_line(line.to_owned()){
             name_estacion= obtain_estacion_pronostico(line.to_string());
         }
@@ -74,13 +73,8 @@ pub fn filter_data_dato_horario(data:String)-> Vec<DatoHorario>{
 
         if identify_data_line_dato_horario(line.to_owned()){
             reports_dato_horario.push(report_dato_horario(line.to_owned()));
-
         }
-
-         
-         
     }
 
     return reports_dato_horario;
-
 }

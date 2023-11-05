@@ -15,3 +15,5 @@ Cargo.lock
 
 #Downloads txt
 *.txt
+
+servidor_de_informacion_climatologica/.env
