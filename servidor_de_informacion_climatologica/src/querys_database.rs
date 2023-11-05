@@ -46,47 +46,20 @@ pub fn consult_reports(quantity :i64){
 
     let mut connection = establish_connection();
 
-    let results = reportes_dato_horario
+    let _ = reportes_dato_horario
         .limit(quantity)
         .load::<DatoHorario>(& mut connection)
         .expect("Error loading posts");
-    println!("-----------------------------------------");
-    println!("Found {} reportes", results.len());
-    println!("----------------------------------------\n");
-    for p in results {
-        println!("Alias : {:?}", p.estacion);
-        println!("Fecha : {:?}", p.fecha);
-        println!("Hora : {:?}", p.hora);
-        println!("Temperatura : {:?}", p.temperatura.unwrap());
-        println!("Humedad : {:?}", p.humedad_relativa.unwrap());
-        println!("Presion : {:?}", p.presion_superficie.unwrap());
-        println!("Viento Direccion : {:?}", p.viento_direccion.unwrap());
-        println!("Viento Intensidad : {:?}", p.viento_intensidad.unwrap());
-        println!("----------------------------------------\n");
-        
-    }
 }
+
 
 pub fn insert_reports(reports: Vec<DatoHorario>){
-
-   for report in reports{
-        insert_report(report);
-   }
-}
-
-
-fn insert_report( report : DatoHorario){
-
+    
     let mut connection = establish_connection();
 
-    _ = diesel::insert_into(reportes_dato_horario)
-            .values((estacion.eq(report.estacion), fecha.eq(report.fecha), hora.eq(report.hora), temperatura.eq(report.temperatura.unwrap()), humedad_relativa.eq(report.humedad_relativa.unwrap())
-            , presion_superficie.eq(report.presion_superficie.unwrap()), viento_direccion.eq(report.viento_direccion.unwrap()), viento_intensidad.eq(report.viento_intensidad.unwrap()) ))
-            .execute(& mut connection)
-            .expect("Error insertando datos horarios");        
-    
-        
+    _ = diesel::insert_into(reportes_dato_horario).values(&reports).execute(& mut connection);
 
 }
+
 
 

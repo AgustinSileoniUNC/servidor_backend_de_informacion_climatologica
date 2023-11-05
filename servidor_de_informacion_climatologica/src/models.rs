@@ -1,4 +1,6 @@
-use diesel::prelude::Queryable;
+use diesel::prelude::{Queryable, Insertable};
+
+use crate::schema::reportes_dato_horario;
 
 
 #[derive(Debug)]
@@ -26,7 +28,8 @@ pub struct Pronostico{
     pub precipitacion: String
 }
 
-#[derive(Queryable,Debug)]
+#[derive(Queryable,Debug, Insertable)]
+#[diesel(table_name= reportes_dato_horario)]
 pub struct DatoHorario{
     pub id_reporte: i32,
     pub estacion: String,
