@@ -1,5 +1,5 @@
 #[macro_use]
-pub mod download;
+pub mod download_data;
 pub mod models;
 pub mod regular_expressions;
 pub mod extract_data;

@@ -4,6 +4,7 @@ extern crate diesel;
 use crate::models::{Estacion, DatoHorario};
 use crate::schema::estaciones::dsl::estaciones;
 use crate::schema::reportes_dato_horario::dsl::reportes_dato_horario;
+use crate::schema::reportes_dato_horario::{estacion, fecha, hora,temperatura, humedad_relativa, presion_superficie, viento_direccion, viento_intensidad};
 use diesel::prelude::*;
 use diesel::mysql::MysqlConnection;
 use dotenvy::dotenv;
@@ -65,3 +66,27 @@ pub fn consult_reports(quantity :i64){
         
     }
 }
+
+pub fn insert_reports(reports: Vec<DatoHorario>){
+
+   for report in reports{
+        insert_report(report);
+   }
+}
+
+
+fn insert_report( report : DatoHorario){
+
+    let mut connection = establish_connection();
+
+    _ = diesel::insert_into(reportes_dato_horario)
+            .values((estacion.eq(report.estacion), fecha.eq(report.fecha), hora.eq(report.hora), temperatura.eq(report.temperatura.unwrap()), humedad_relativa.eq(report.humedad_relativa.unwrap())
+            , presion_superficie.eq(report.presion_superficie.unwrap()), viento_direccion.eq(report.viento_direccion.unwrap()), viento_intensidad.eq(report.viento_intensidad.unwrap()) ))
+            .execute(& mut connection)
+            .expect("Error insertando datos horarios");        
+    
+        
+
+}
+
+
