@@ -1,4 +1,5 @@
 
+use chrono::NaiveDateTime;
 use regex::Regex;
 
 use crate::models::{TiempoPresente, Pronostico, DatoHorario};
@@ -67,11 +68,13 @@ pub fn report_dato_horario(texto:String)-> DatoHorario{
     match regular_expression.captures(&texto) {
         Some(caps)=>{
 
+            let date = chrono::NaiveDate::from_ymd_opt( caps[1][4..].parse::<i32>().unwrap(), caps[1][2..4].parse::<u32>().unwrap(), caps[1][0..2].parse::<u32>().unwrap());
+            let time = chrono::NaiveTime::from_hms_opt(caps[3].trim().parse::<u32>().unwrap(),0,0);
+            let fecha = NaiveDateTime::new(date.unwrap(),time.unwrap());
             DatoHorario{
                 id_reporte: 0,
                 estacion: caps[18].trim().to_owned(),
-                fecha: caps[1].to_owned(),
-                hora: caps[3].to_owned(),
+                fecha:  fecha,
                 temperatura: Some(caps[5].to_owned()),
                 humedad_relativa: Some(caps[8].to_owned()),
                 presion_superficie: Some(caps[10].to_owned()),

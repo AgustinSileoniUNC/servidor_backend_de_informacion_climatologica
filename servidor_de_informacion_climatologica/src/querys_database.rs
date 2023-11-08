@@ -1,10 +1,10 @@
     
 extern crate diesel;
 
-use crate::models::{Estacion, DatoHorario};
+use crate::models::{Estacion, DatoHorario, Fecha};
 use crate::schema::estaciones::dsl::estaciones;
+use crate::schema::fechas;
 use crate::schema::reportes_dato_horario::dsl::reportes_dato_horario;
-use crate::schema::reportes_dato_horario::{estacion, fecha, hora,temperatura, humedad_relativa, presion_superficie, viento_direccion, viento_intensidad};
 use diesel::prelude::*;
 use diesel::mysql::MysqlConnection;
 use dotenvy::dotenv;
@@ -59,7 +59,25 @@ pub fn insert_reports(reports: Vec<DatoHorario>){
 
     _ = diesel::insert_into(reportes_dato_horario).values(&reports).execute(& mut connection);
 
+
 }
 
 
+
+pub fn fechas(){
+    let mut connection = establish_connection();
+
+    let new_date = chrono::NaiveDate::from_ymd_opt(2023, 11, 6);
+
+    let new_time = chrono::NaiveTime::from_hms_opt(14,30,0);
+
+    let new_row = Fecha {
+        id_fecha: 1,
+        fecha: new_date,
+        hora: new_time.unwrap()
+    };
+    
+    _ = diesel::insert_into(fechas::table).values( &new_row).execute(& mut connection);
+
+}
 

@@ -1,6 +1,8 @@
+use chrono::{NaiveDate, NaiveTime, NaiveDateTime};
 use diesel::prelude::{Queryable, Insertable};
 
-use crate::schema::reportes_dato_horario;
+use crate::schema::{reportes_dato_horario, fechas};
+
 
 
 #[derive(Debug)]
@@ -33,8 +35,7 @@ pub struct Pronostico{
 pub struct DatoHorario{
     pub id_reporte: i32,
     pub estacion: String,
-    pub fecha: String,
-    pub hora: String,
+    pub fecha: NaiveDateTime,
     pub temperatura: Option<String>,
     pub humedad_relativa: Option<String>,
     pub presion_superficie: Option<String>,
@@ -51,3 +52,11 @@ pub struct Estacion{
     pub nombre_estacion_pronostico:Option<String>
 }
 
+
+#[derive(Queryable,Debug,Insertable)]
+#[diesel(table_name= fechas)]
+pub struct Fecha{
+    pub id_fecha: i32,
+    pub fecha: Option<NaiveDate>,
+    pub hora: NaiveTime
+}

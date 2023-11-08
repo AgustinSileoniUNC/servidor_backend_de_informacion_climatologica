@@ -9,5 +9,5 @@ edition = "2021"
 reqwest = {version = "*", features = ["blocking","json"]}
 regex = {version = "*"}
 chrono ={ version = "*"}
-diesel = {version = "2.1.3", features = ["mysql"]}
+diesel = {version = "2.1.3", features = ["mysql","chrono"]}
 dotenvy = "0.15"

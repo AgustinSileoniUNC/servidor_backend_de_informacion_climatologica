@@ -19,10 +19,7 @@ diesel::table! {
         id_reporte -> Integer,
         #[max_length = 45]
         estacion -> Varchar,
-        #[max_length = 45]
-        fecha -> Varchar,
-        #[max_length = 45]
-        hora -> Varchar,
+        fecha -> Datetime,
         #[max_length = 45]
         temperatura -> Nullable<Varchar>,
         #[max_length = 45]
@@ -33,5 +30,13 @@ diesel::table! {
         viento_direccion -> Nullable<Varchar>,
         #[max_length = 45]
         viento_intensidad -> Nullable<Varchar>,
+    }
+}
+
+diesel::table! {
+    fechas(id_fecha){
+        id_fecha -> Integer,
+        fecha -> Date,
+        hora -> Time,
     }
 }
