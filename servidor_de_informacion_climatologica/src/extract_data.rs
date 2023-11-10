@@ -1,5 +1,5 @@
 
-use std::time::Instant;
+use std::{time::Instant, collections::HashMap};
 
 use crate::{regular_expressions::{obtain_report_tiempo_presente, obtain_estacion_pronostico, identify_estacion_line, report_dato_horario, report_pronostico, identify_data_line_pronostico, identify_data_line_dato_horario}, models::{TiempoPresente, Pronostico, DatoHorario}};
 
@@ -33,20 +33,24 @@ fn evite_empty_values(original_text_line:String)-> String{
 }
 
 
-pub fn filter_data_pronostico(data:String)-> Vec<Pronostico>{
-    
+pub fn filter_data_pronostico(data:String)-> HashMap< String,Vec<Pronostico>>{
+
+    let mut pronostico : HashMap< String,Vec<Pronostico> > = HashMap::new();
     let mut reports_pronostico: Vec<Pronostico> = Vec::new();
     let mut lines = data.lines();
-    
+
     //Delete header
     for _  in 1..6{
         lines.next();
     }
 
-    let mut name_estacion = String::new();
+    let mut name_estacion = obtain_estacion_pronostico(lines.next().unwrap().to_string());
 
     for (_, line) in lines.enumerate(){
         if identify_estacion_line(line.to_owned()){
+            println!("{}",name_estacion );
+            pronostico.insert(name_estacion.to_string(), reports_pronostico.clone());
+            reports_pronostico.clear();
             name_estacion= obtain_estacion_pronostico(line.to_string());
         }
         else if identify_data_line_pronostico(line.to_owned()){
@@ -55,8 +59,9 @@ pub fn filter_data_pronostico(data:String)-> Vec<Pronostico>{
         }
     }
 
-    return reports_pronostico;
+    pronostico.insert(name_estacion.to_string(), reports_pronostico.clone());
 
+    return pronostico;
 
 }
 

@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use chrono::{Local, Duration};
 use crate::extract_data::{filter_data_tiempo_presente, filter_data_pronostico, filter_data_dato_horario};
 use crate::models::{TiempoPresente, Pronostico, DatoHorario};
@@ -15,7 +17,7 @@ pub fn update_datos_tiempo_presente()->Vec<TiempoPresente>{
 }
 
 
-pub fn update_datos_pronostico()-> Vec<Pronostico>{
+pub fn update_datos_pronostico()-> HashMap< String,Vec<Pronostico>>{
 
     let path_file_for_download = "pron5d/pron";
     let url_pronostico = create_url_download(path_file_for_download.to_string(),0);

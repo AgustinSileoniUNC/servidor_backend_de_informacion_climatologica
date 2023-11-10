@@ -19,7 +19,7 @@ pub struct TiempoPresente{
     pub presion_superficie: String
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Pronostico{
     pub estacion: String,
     pub fecha: String,

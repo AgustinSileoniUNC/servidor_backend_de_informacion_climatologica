@@ -1,4 +1,7 @@
-use servidor_de_informacion_climatologica::handler_reports_dato_horario::consult_reports_dato_horario_5_days;
+
+use servidor_de_informacion_climatologica:: update_data::update_datos_pronostico;
+
+
 
 
 
@@ -6,11 +9,14 @@ use servidor_de_informacion_climatologica::handler_reports_dato_horario::consult
 fn main() {
     
     
-    let results = consult_reports_dato_horario_5_days("azul");
+    
+    let data = update_datos_pronostico();
 
-    for result in results{
-        println!("{:?}", result)
+    for (key, value) in data{
+        println!("ID: {}, Datos: {:?}", key, value);
     }
+
+
 
 
 
