@@ -1,4 +1,4 @@
-use chrono::NaiveDateTime;
+use chrono::{NaiveDateTime, Days, Utc};
 
 //Format %Y-%m-%d %H:%M
 pub fn parse_str_to_naive(date_str: String)->NaiveDateTime{
@@ -35,6 +35,15 @@ pub fn month_name_to_number(month_name:&str)-> i64{
         _ => 0
     }
     
+}
+
+pub fn date_since_ago(since_days: u64)-> NaiveDateTime{
+
+    let now= Utc::now().naive_utc();
+
+    let d = Days::new(since_days);
+
+    return now.checked_sub_days(d).unwrap();
 }
 
 

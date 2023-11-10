@@ -32,11 +32,3 @@ diesel::table! {
         viento_intensidad -> Nullable<Varchar>,
     }
 }
-
-diesel::table! {
-    fechas(id_fecha){
-        id_fecha -> Integer,
-        fecha -> Date,
-        hora -> Time,
-    }
-}
