@@ -11,6 +11,15 @@ use dotenvy::dotenv;
 use std::env;
 
 
+fn establish_connection()-> MysqlConnection{
+    dotenv().ok();
+    let database_url = env::var("DATABASE_URL")
+            .expect("DATABASE_URL must be set");
+        MysqlConnection::establish(&database_url)
+            .expect(&format!("Error connecting to {}", database_url))
+}
+
+
 pub fn obtain_estaciones_db(quantity :i64){
             
     let mut connection = establish_connection();
@@ -34,13 +43,6 @@ pub fn obtain_estaciones_db(quantity :i64){
 }
 
 
-pub fn establish_connection()-> MysqlConnection{
-    dotenv().ok();
-    let database_url = env::var("DATABASE_URL")
-            .expect("DATABASE_URL must be set");
-        MysqlConnection::establish(&database_url)
-            .expect(&format!("Error connecting to {}", database_url))
-}
 
 pub fn consult_reports(quantity :i64){
 
@@ -78,6 +80,65 @@ pub fn fechas(){
     };
     
     _ = diesel::insert_into(fechas::table).values( &new_row).execute(& mut connection);
-
 }
 
+
+pub fn obtener_nombre_estacion_tiempo_presente(alias_endpoint:& str)-> String{
+    use crate::schema::estaciones::dsl::*;
+
+    let mut connection = establish_connection();
+
+    let results = estaciones
+            .select( nombre_estacion_tiempo_presente.nullable())
+            .filter(alias.eq(alias_endpoint))
+            .load::<Option<String>>(& mut connection)
+            .expect("Error loading station");
+
+    match &results[0]{
+        Some(x) => return x.to_string(),
+        None => "Error loading station".to_string(),
+    }
+
+    
+}
+
+
+pub fn obtener_nombre_estacion_dato_horario(alias_endpoint:& str)-> String{
+    use crate::schema::estaciones::dsl::*;
+
+    let mut connection = establish_connection();
+
+    let results = estaciones
+            .select( nombre_estacion_dato_horario.nullable())
+            .filter(alias.eq(alias_endpoint))
+            .load::<Option<String>>(& mut connection)
+            .expect("Error loading station");
+
+    match &results[0]{
+        Some(x) => return x.to_string(),
+        None => "Error loading station".to_string(),
+    }
+
+    
+}
+
+
+
+pub fn obtener_nombre_estacion_pronostico(alias_endpoint:& str)-> String{
+    use crate::schema::estaciones::dsl::*;
+
+    let mut connection = establish_connection();
+
+    let results = estaciones
+            .select( nombre_estacion_pronostico.nullable())
+            .filter(alias.eq(alias_endpoint))
+            .load::<Option<String>>(& mut connection)
+            .expect("Error loading station");
+
+    match &results[0]{
+        Some(x) => return x.to_string(),
+        None => "Error loading station".to_string(),
+    }
+
+    
+}

@@ -126,15 +126,3 @@ pub fn identify_estacion_line(line:String)-> bool{
     }
 }
 
-pub fn identify_division_line(texto:String)-> bool{    
-    let regular_expression = Regex::new(r"(={96})").unwrap();
-
-    match regular_expression.captures(&texto){
-        Some(_) => {
-            return true;
-        },
-        None => { 
-             return false;
-        }    
-    }
-}

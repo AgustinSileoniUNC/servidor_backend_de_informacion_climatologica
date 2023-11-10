@@ -1,4 +1,6 @@
 
+use std::time::Instant;
+
 use crate::{regular_expressions::{obtain_report_tiempo_presente, obtain_estacion_pronostico, identify_estacion_line, report_dato_horario, report_pronostico, identify_data_line_pronostico, identify_data_line_dato_horario}, models::{TiempoPresente, Pronostico, DatoHorario}};
 
 
@@ -69,12 +71,19 @@ pub fn filter_data_dato_horario(data:String)-> Vec<DatoHorario>{
          lines.next();
      }
 
+     let start_time = Instant::now();
+ 
     for (_, line) in lines.enumerate(){
 
         if identify_data_line_dato_horario(line.to_owned()){
             reports_dato_horario.push(report_dato_horario(line.to_owned()));
         }
     }
+
+    let end_time_data = Instant::now();
+    let duration = end_time_data.duration_since(start_time);
+    println!("El procesamiento de lineas tomo {} segundos", duration.as_secs());
+
 
     return reports_dato_horario;
 }
