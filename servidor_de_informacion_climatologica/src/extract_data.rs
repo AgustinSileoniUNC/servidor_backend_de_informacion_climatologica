@@ -6,17 +6,36 @@ use crate::{regular_expressions::{obtain_report_tiempo_presente, obtain_estacion
 
 
 
-pub fn filter_data_tiempo_presente(data:String)-> Vec<TiempoPresente>{
+pub fn filter_data_tiempo_presente(data:String)-> HashMap<String,Vec<TiempoPresente>>{
 
+    let mut tiempo_presente :HashMap<String, Vec<TiempoPresente>> = HashMap::new();
     let mut reports_tiempo_presente: Vec<TiempoPresente> = Vec::new();
     
-    let lines = data.lines();
+    let mut lines = data.lines();
 
+    let  first_report:TiempoPresente =obtain_report_tiempo_presente(evite_empty_values(lines.next().unwrap().to_string()));
+    reports_tiempo_presente.push( first_report);
+    
+    
     for (_ , line) in lines.enumerate() {
-        reports_tiempo_presente.push( obtain_report_tiempo_presente(evite_empty_values(line.to_string())) );
+
+        let report = obtain_report_tiempo_presente(evite_empty_values(line.to_string())) ;
+
+        if report.estacion.eq(&reports_tiempo_presente.last().unwrap().estacion){
+            reports_tiempo_presente.push( report);
+        }
+        else{
+            tiempo_presente.insert(reports_tiempo_presente.last().unwrap().estacion.to_string(), reports_tiempo_presente.clone());
+            reports_tiempo_presente.clear();
+            reports_tiempo_presente.push(report);
+        }
+
     }
 
-    return reports_tiempo_presente;
+    tiempo_presente.insert(reports_tiempo_presente.last().unwrap().estacion.to_string(), reports_tiempo_presente.clone());
+    
+
+    return tiempo_presente;
 }
 
 
@@ -92,6 +111,6 @@ pub fn filter_data_dato_horario(data:String)->Vec<DatoHorario>{
             reports_dato_horario.push(report_dato_horario(line.to_owned()));
         }
     }
-    
+
     return reports_dato_horario;
 }

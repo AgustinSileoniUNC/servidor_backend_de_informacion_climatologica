@@ -7,7 +7,7 @@ use crate::models::{TiempoPresente, Pronostico, DatoHorario};
 //El link de descarga utiliza la fecha por lo que cambia cada dia
 
 
-pub fn update_datos_tiempo_presente()->Vec<TiempoPresente>{
+pub fn update_datos_tiempo_presente()->HashMap<String,Vec<TiempoPresente>>{
         
     let path_file_for_download= "observaciones/tiepre";
     let url_update_daily = create_url_download(path_file_for_download.to_string(),0);

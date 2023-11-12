@@ -5,7 +5,7 @@ use crate::schema::reportes_dato_horario;
 
 
 
-#[derive(Debug)]
+#[derive(Debug,Clone)]
 pub struct TiempoPresente{
     pub estacion: String,
     pub fecha: String,
