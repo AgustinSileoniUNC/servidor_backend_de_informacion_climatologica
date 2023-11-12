@@ -74,9 +74,8 @@ fn filter_no_ascii(text_line:&str)-> String{
 }
 
 
-pub fn filter_data_dato_horario(data:String)->HashMap< String,Vec<DatoHorario> >{
+pub fn filter_data_dato_horario(data:String)->Vec<DatoHorario>{
 
-    let mut datos_horarios : HashMap< String,Vec<DatoHorario>> = HashMap::new();
     let mut reports_dato_horario : Vec<DatoHorario> = Vec::new();
     let mut lines = data.lines();
     //Delete header
@@ -84,32 +83,15 @@ pub fn filter_data_dato_horario(data:String)->HashMap< String,Vec<DatoHorario> >
          lines.next();
      }
 
-    let first_report =  report_dato_horario(lines.next().unwrap().to_string());
-    reports_dato_horario.push(first_report);
-
 
  
     for (_, line) in lines.enumerate(){
 
         if identify_data_line_dato_horario(line.to_owned()){
 
-            let reporte =  report_dato_horario(line.to_owned());
-            if reporte.estacion.eq( &reports_dato_horario.last().unwrap().estacion){
-                reports_dato_horario.push(reporte);
-            }
-            else {
-                datos_horarios.insert(reports_dato_horario.last().unwrap().estacion.to_string() , reports_dato_horario.clone());
-                
-                reports_dato_horario.clear();
-                reports_dato_horario.push(reporte);
-            }
+            reports_dato_horario.push(report_dato_horario(line.to_owned()));
         }
     }
-
-    datos_horarios.insert(reports_dato_horario.last().unwrap().estacion.to_string() , reports_dato_horario.clone());
-    reports_dato_horario.clear();
-
-
-
-    return datos_horarios;
+    
+    return reports_dato_horario;
 }
