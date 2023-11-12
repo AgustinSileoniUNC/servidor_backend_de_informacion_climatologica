@@ -27,7 +27,7 @@ pub fn update_datos_pronostico()-> HashMap< String,Vec<Pronostico>>{
 }
 
 
-pub fn update_datos_horarios()-> Vec<DatoHorario>{
+pub fn update_datos_horarios()-> HashMap< String,Vec<DatoHorario>>{
 
     let path_file_for_download = "observaciones/datohorario";
     let url_datos_horarios = create_url_download(path_file_for_download.to_string(),1); //Without extension

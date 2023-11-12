@@ -9,7 +9,6 @@ pub fn obtain_report_tiempo_presente(texto:String)-> TiempoPresente{
     
     let regular_expression =  Regex::new(r"(\w+(\D*)*(\w+)*)(;)(\d{2}-\w+-\d{4})(;)(\d{2}:\d{2})(;)(\w+(\s\w+)*)(;)((\d+(\.\d+)*)(\s(km))|Menor a 100 mts)(;)((-)*\d+((\.\d+)*))(;)((No se calcula)|((-)*\d+\.*\d*))(;\s)(\d+)(;)(\w+(\s\w+)*(\s\s\w+)*)(;)(\d+(\.\d+)*)").unwrap();
 
-
     match regular_expression.captures(&texto){
         
         Some(caps) => {
@@ -67,14 +66,13 @@ pub fn report_dato_horario(texto:String)-> DatoHorario{
     let regular_expression = Regex::new(r"(\d{8})(\s*)(\d+)(\s*)((-)*\d*\.\d+)(\s*)(\d*)*(\s*)(((\d+\.\d)*))(\s*)(\d*)(\s*)(\d*)(\s*)(\w+(\D*)*(\w+)*)").unwrap();
     match regular_expression.captures(&texto) {
         Some(caps)=>{
-
             let date = chrono::NaiveDate::from_ymd_opt( caps[1][4..].parse::<i32>().unwrap(), caps[1][2..4].parse::<u32>().unwrap(), caps[1][0..2].parse::<u32>().unwrap());
             let time = chrono::NaiveTime::from_hms_opt(caps[3].trim().parse::<u32>().unwrap(),0,0);
             let fecha = NaiveDateTime::new(date.unwrap(),time.unwrap());
             DatoHorario{
                 id_reporte: 0,
                 estacion: caps[18].trim().to_owned(),
-                fecha:  fecha,
+                fecha,
                 temperatura: Some(caps[5].to_owned()),
                 humedad_relativa: Some(caps[8].to_owned()),
                 presion_superficie: Some(caps[10].to_owned()),
@@ -91,7 +89,7 @@ pub fn report_dato_horario(texto:String)-> DatoHorario{
 
 pub fn obtain_estacion_pronostico(texto:String)-> String{
     
-    let nombre_estacion: Regex = Regex::new(r"([\w*().]+)$").unwrap();
+    let nombre_estacion: Regex = Regex::new(r"[\w*_*]+[[A-Z]+.+]*(\([A-Z]+\))*$").unwrap();
 
     match nombre_estacion.captures(&texto){
         Some(caps) => {
@@ -116,7 +114,7 @@ pub fn identify_data_line_dato_horario(line:String)-> bool{
 }
 
 pub fn identify_estacion_line(line:String)-> bool{
-    let regular_expression_estacion_line = Regex::new(r"([\w*_*]+)$").unwrap();
+    let regular_expression_estacion_line = Regex::new(r"[\w*_*]+[[A-Z]+.+]*(\([A-Z]+\))*$").unwrap();
 
     if regular_expression_estacion_line.is_match(&line){
         return true;

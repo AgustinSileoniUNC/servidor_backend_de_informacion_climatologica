@@ -30,7 +30,7 @@ pub struct Pronostico{
     pub precipitacion: String
 }
 
-#[derive(Queryable,Debug, Insertable)]
+#[derive(Queryable,Debug, Insertable,Clone)]
 #[diesel(table_name= reportes_dato_horario)]
 pub struct DatoHorario{
     pub id_reporte: i32,

@@ -1,5 +1,5 @@
 
-use std::{time::Instant, collections::HashMap};
+use std::collections::HashMap;
 
 use crate::{regular_expressions::{obtain_report_tiempo_presente, obtain_estacion_pronostico, identify_estacion_line, report_dato_horario, report_pronostico, identify_data_line_pronostico, identify_data_line_dato_horario}, models::{TiempoPresente, Pronostico, DatoHorario}};
 
@@ -46,15 +46,17 @@ pub fn filter_data_pronostico(data:String)-> HashMap< String,Vec<Pronostico>>{
 
     let mut name_estacion = obtain_estacion_pronostico(lines.next().unwrap().to_string());
 
-    for (_, line) in lines.enumerate(){
-        if identify_estacion_line(line.to_owned()){
-            println!("{}",name_estacion );
+    for ( _, line) in lines.enumerate(){
+        
+        let line_filtered = filter_no_ascii(line);
+
+        if identify_estacion_line(line_filtered.to_owned()){
             pronostico.insert(name_estacion.to_string(), reports_pronostico.clone());
             reports_pronostico.clear();
-            name_estacion= obtain_estacion_pronostico(line.to_string());
+            name_estacion= obtain_estacion_pronostico(line_filtered.to_string()); 
         }
-        else if identify_data_line_pronostico(line.to_owned()){
-            let report = report_pronostico(name_estacion.to_owned(), line.to_owned());
+        else if identify_data_line_pronostico(line_filtered.to_owned()){
+            let report = report_pronostico(name_estacion.to_owned(), line_filtered.to_owned());
             reports_pronostico.push(report);
         }
     }
@@ -65,30 +67,49 @@ pub fn filter_data_pronostico(data:String)-> HashMap< String,Vec<Pronostico>>{
 
 }
 
+fn filter_no_ascii(text_line:&str)-> String{
+    let first_filter = text_line.replace("Ã‘","N");
+    let output = first_filter.replace(".", "_");
+    return output;
+}
 
-pub fn filter_data_dato_horario(data:String)-> Vec<DatoHorario>{
-    
+
+pub fn filter_data_dato_horario(data:String)->HashMap< String,Vec<DatoHorario> >{
+
+    let mut datos_horarios : HashMap< String,Vec<DatoHorario>> = HashMap::new();
     let mut reports_dato_horario : Vec<DatoHorario> = Vec::new();
     let mut lines = data.lines();
-
     //Delete header
      for _ in 1..3{
          lines.next();
      }
 
-     let start_time = Instant::now();
+    let first_report =  report_dato_horario(lines.next().unwrap().to_string());
+    reports_dato_horario.push(first_report);
+
+
  
     for (_, line) in lines.enumerate(){
 
         if identify_data_line_dato_horario(line.to_owned()){
-            reports_dato_horario.push(report_dato_horario(line.to_owned()));
+
+            let reporte =  report_dato_horario(line.to_owned());
+            if reporte.estacion.eq( &reports_dato_horario.last().unwrap().estacion){
+                reports_dato_horario.push(reporte);
+            }
+            else {
+                datos_horarios.insert(reports_dato_horario.last().unwrap().estacion.to_string() , reports_dato_horario.clone());
+                
+                reports_dato_horario.clear();
+                reports_dato_horario.push(reporte);
+            }
         }
     }
 
-    let end_time_data = Instant::now();
-    let duration = end_time_data.duration_since(start_time);
-    println!("El procesamiento de lineas tomo {} segundos", duration.as_secs());
+    datos_horarios.insert(reports_dato_horario.last().unwrap().estacion.to_string() , reports_dato_horario.clone());
+    reports_dato_horario.clear();
 
 
-    return reports_dato_horario;
+
+    return datos_horarios;
 }
