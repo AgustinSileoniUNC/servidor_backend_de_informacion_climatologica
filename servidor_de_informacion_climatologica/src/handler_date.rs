@@ -42,8 +42,10 @@ pub fn date_since_ago(since_days: u64)-> NaiveDateTime{
     let now= Utc::now().naive_utc();
 
     let d = Days::new(since_days);
+    
+    let since_date =now.checked_sub_days(d).unwrap(); 
 
-    return now.checked_sub_days(d).unwrap();
+    return since_date;
 }
 
 

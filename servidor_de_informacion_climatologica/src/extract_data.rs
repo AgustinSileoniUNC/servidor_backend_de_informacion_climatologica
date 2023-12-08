@@ -20,7 +20,6 @@ pub fn filter_data_tiempo_presente(data:String)-> HashMap<String,Vec<TiempoPrese
     for (_ , line) in lines.enumerate() {
 
         let report = obtain_report_tiempo_presente(evite_empty_values(line.to_string())) ;
-
         if report.estacion.eq(&reports_tiempo_presente.last().unwrap().estacion){
             reports_tiempo_presente.push( report);
         }
