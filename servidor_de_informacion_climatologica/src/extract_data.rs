@@ -61,21 +61,24 @@ pub fn filter_data_pronostico(data:String)-> HashMap< String,Vec<Pronostico>>{
     for _  in 1..6{
         lines.next();
     }
-
+    
     let mut name_estacion = obtain_estacion_pronostico(lines.next().unwrap().to_string());
-
+    let mut n = 0;
     for ( _, line) in lines.enumerate(){
         
         let line_filtered = filter_no_ascii(line);
 
         if identify_estacion_line(line_filtered.to_owned()){
+            println!("{}: {}",name_estacion,n);
             pronostico.insert(name_estacion.to_string(), reports_pronostico.clone());
             reports_pronostico.clear();
             name_estacion= obtain_estacion_pronostico(line_filtered.to_string()); 
+            n=0;
         }
         else if identify_data_line_pronostico(line_filtered.to_owned()){
             let report = report_pronostico(name_estacion.to_owned(), line_filtered.to_owned());
             reports_pronostico.push(report);
+            n += 1;
         }
     }
 
